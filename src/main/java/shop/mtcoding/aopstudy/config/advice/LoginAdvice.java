@@ -1,4 +1,4 @@
-package shop.mtcoding.aopstudy.advice;
+package shop.mtcoding.aopstudy.config.advice;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

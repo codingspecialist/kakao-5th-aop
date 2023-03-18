@@ -1,4 +1,4 @@
-package shop.mtcoding.aopstudy.config.aop;
+package shop.mtcoding.aopstudy.advice;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -7,7 +7,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import shop.mtcoding.aopstudy.config.annotation.LoginUser;
+import shop.mtcoding.aopstudy.config.annotation.LoginUserAop;
 import shop.mtcoding.aopstudy.model.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,10 +31,10 @@ public class LoginAdvice {
         for (int i = 0; i < args.length; i++) {
             Annotation[] annotations = annotationsPA[i]; // 첫번째 파라메터의 어노테이션들은?
             for (Annotation anno : annotations) {
-                if (anno instanceof LoginUser) {
+                if (anno instanceof LoginUserAop) {
                     HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
                     HttpSession session = req.getSession();
-                    User principal = (User) session.getAttribute("principal");
+                    User principal = (User) session.getAttribute("loginUser");
                     return jp.proceed(new Object[]{principal});
                 }
             }

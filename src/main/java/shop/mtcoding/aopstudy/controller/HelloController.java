@@ -7,13 +7,13 @@ import shop.mtcoding.aopstudy.config.annotation.Hello;
 @RestController
 public class HelloController {
 
-    @GetMapping("/v1")
+    @GetMapping("/hello/v1")
     public String v1(){
         return "v1";
     }
 
     @Hello
-    @GetMapping("/v2")
+    @GetMapping("/hello/v2")
     public String v2(String username){
         return "v2";
     }

@@ -14,30 +14,34 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.util.stream.IntStream;
 
 @Aspect
 @Component
 public class LoginAdvice {
 
-    @Around("execution(* shop.mtcoding.aopstudy.controller..*.*(..))")
+    @Around("execution(* shop.mtcoding.aopstudy.controller.*.*(..))")
     public Object loginUserAdvice(ProceedingJoinPoint jp) throws Throwable {
-        Object[] args = jp.getArgs();
-
         MethodSignature signature = (MethodSignature) jp.getSignature();
         Method method = signature.getMethod();
+        Object[] args = jp.getArgs();
+        Parameter[] parameters = method.getParameters();
 
-        Annotation[][] annotationsPA = method.getParameterAnnotations();
+        int loginUserAopIndex = IntStream.range(0, parameters.length)
+                .filter(i -> parameters[i].isAnnotationPresent(LoginUserAop.class))
+                .findFirst()
+                .orElse(-1);
 
-        for (int i = 0; i < args.length; i++) {
-            Annotation[] annotations = annotationsPA[i]; // 첫번째 파라메터의 어노테이션들은?
-            for (Annotation anno : annotations) {
-                if (anno instanceof LoginUserAop) {
-                    HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-                    HttpSession session = req.getSession();
-                    User principal = (User) session.getAttribute("loginUser");
-                    return jp.proceed(new Object[]{principal});
-                }
-            }
+        if (loginUserAopIndex >= 0) {
+            HttpServletRequest req = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+            HttpSession session = req.getSession();
+            User principal = (User) session.getAttribute("loginUser");
+
+            Object[] newArgs = args.clone();
+            newArgs[loginUserAopIndex] = principal;
+
+            return jp.proceed(newArgs);
         }
 
         return jp.proceed();

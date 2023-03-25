@@ -2,10 +2,7 @@ package shop.mtcoding.aopstudy.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.mtcoding.aopstudy.config.annotation.LoginUserAop;
 import shop.mtcoding.aopstudy.config.annotation.LoginUserResolver;
 import shop.mtcoding.aopstudy.dto.JoinInDto;
@@ -38,7 +35,8 @@ public class UserController {
     }
 
     @GetMapping("/auth/v2")
-    public String authInfoAop(@LoginUserAop User user){ // 인증 필요함
+    public String authInfoAop(@RequestParam(defaultValue = "0") int n, @LoginUserAop User user){ // 인증 필요함
+        System.out.println("숫자 : "+n);
         System.out.println(user.getUsername());
         return "v2 username : "+user.getUsername();
     }

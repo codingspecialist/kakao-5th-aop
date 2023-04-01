@@ -29,15 +29,14 @@ public class UserController {
         return "user ok";
     }
 
+    // username 출력 안됨
     @GetMapping("/auth/v1") // 인증 필요함
     public String userInfo(User user){ // 값 할당 안됨
         return "v1 username : "+user.getUsername();
     }
 
     @GetMapping("/auth/v2")
-    public String authInfoAop(@RequestParam(defaultValue = "0") int n, @LoginUserAop User user){ // 인증 필요함
-        System.out.println("숫자 : "+n);
-        System.out.println(user.getUsername());
+    public String authInfoAop(@LoginUserAop User user){ // 인증 필요함
         return "v2 username : "+user.getUsername();
     }
 

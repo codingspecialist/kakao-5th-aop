@@ -13,6 +13,7 @@ public class JoinInDto {
     private String username;
     @NotEmpty
     private String password;
+    @NotEmpty
     @Size(min = 4, max = 10)
     private String email;
 }

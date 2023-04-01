@@ -12,9 +12,11 @@ public class HelloController {
         return "v1";
     }
 
+    // http://localhost:8080/hello/v2?username=ssar
     @Hello
     @GetMapping("/hello/v2")
     public String v2(String username){
+        System.out.println("username : 값 변경? : "+username);
         return "v2";
     }
 }

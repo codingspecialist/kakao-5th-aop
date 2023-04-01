@@ -1,8 +1,10 @@
 package shop.mtcoding.aopstudy.config.advice;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -24,9 +26,9 @@ public class ValidAdvice {
     public void putMapping() {
     }
 
-    @Around("postMapping() || putMapping()")
-    public Object validationAdvice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        Object[] args = proceedingJoinPoint.getArgs();
+    @Before("postMapping() || putMapping()")
+    public void validationAdvice(JoinPoint jp) throws Throwable {
+        Object[] args = jp.getArgs();
         for (Object arg : args) {
             if (arg instanceof BindingResult) {
                 BindingResult bindingResult = (BindingResult) arg;
@@ -41,6 +43,5 @@ public class ValidAdvice {
                 }
             }
         }
-        return proceedingJoinPoint.proceed(); // 정상적으로 해당 메서드를 실행해라!!
     }
 }

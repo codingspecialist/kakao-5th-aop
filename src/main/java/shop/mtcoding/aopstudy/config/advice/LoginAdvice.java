@@ -12,7 +12,6 @@ import shop.mtcoding.aopstudy.model.User;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.stream.IntStream;
@@ -22,7 +21,7 @@ import java.util.stream.IntStream;
 public class LoginAdvice {
 
     @Around("execution(* shop.mtcoding.aopstudy.controller.*.*(..))")
-    public Object loginUserAdvice(ProceedingJoinPoint jp) throws Throwable {
+    public Object loginUserAdviceAround(ProceedingJoinPoint jp) throws Throwable {
         MethodSignature signature = (MethodSignature) jp.getSignature();
         Method method = signature.getMethod();
         Object[] args = jp.getArgs();
@@ -38,10 +37,14 @@ public class LoginAdvice {
             HttpSession session = req.getSession();
             User principal = (User) session.getAttribute("loginUser");
 
-            Object[] newArgs = args.clone();
-            newArgs[loginUserAopIndex] = principal;
+            args[loginUserAopIndex] = principal;
 
-            return jp.proceed(newArgs);
+            // 해당 메서드 실행
+            Object result = jp.proceed(args);
+
+            // 실행 후 결과 값을 가지고, 로그를 남길 수 있음. (실재 로그는 log4j 사용해야함)
+            System.out.println(result);
+            return result;
         }
 
         return jp.proceed();

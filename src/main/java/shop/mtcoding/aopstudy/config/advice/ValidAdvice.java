@@ -1,13 +1,12 @@
 package shop.mtcoding.aopstudy.config.advice;
 
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 import shop.mtcoding.aopstudy.config.exception.MyValidationException;
 
@@ -31,12 +30,12 @@ public class ValidAdvice {
         Object[] args = jp.getArgs();
         for (Object arg : args) {
             if (arg instanceof BindingResult) {
-                BindingResult bindingResult = (BindingResult) arg;
+                Errors errors = (Errors) arg;
 
-                if (bindingResult.hasErrors()) {
+                if (errors.hasErrors()) {
                     Map<String, String> errorMap = new HashMap<>();
 
-                    for (FieldError error : bindingResult.getFieldErrors()) {
+                    for (FieldError error : errors.getFieldErrors()) {
                         errorMap.put(error.getField(), error.getDefaultMessage());
                     }
                     throw new MyValidationException(errorMap);

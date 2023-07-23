@@ -13,6 +13,6 @@ public class LogAdvice {
     public Object logAdvice(ProceedingJoinPoint jp) throws Throwable {
         Object object = jp.proceed();
         System.out.println(object+"리턴됨");
-        return jp.proceed();
+        return object;
     }
 }

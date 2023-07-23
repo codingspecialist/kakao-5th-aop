@@ -11,8 +11,8 @@ public class LogAdvice {
 
     @Around("execution(* shop.mtcoding.aopstudy.controller.UserController.*(..))")
     public Object logAdvice(ProceedingJoinPoint jp) throws Throwable {
-        Object object = jp.proceed();
-        System.out.println(object+"리턴됨");
-        return object;
+        Object result = jp.proceed();
+        System.out.println(result+"리턴됨");
+        return result;
     }
 }
